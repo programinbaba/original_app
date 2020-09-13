@@ -1,24 +1,56 @@
-# README
+# テーブル設計
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## tweets テーブル
 
-Things you may want to cover:
+| Column | Type       | Options                        |
+| ------ | ---------- | ------------------------------ |
+| title  | string     | null: false                    |
+| text   | text       | null: false                    |
+| user   | references | null: false, foreign_key: true |
 
-* Ruby version
+### Association
+- has_many :tweet_tags
+- has_many :tags, through: :tweet_tags
+- belongs_to :user
+- has_many :comments
 
-* System dependencies
+## tags テーブル
+| Column | Type   | Options                       |
+| ------ | ------ | ----------------------------- |
+| name   | string | null: false, uniqueness: true |
 
-* Configuration
+### Association
+- has_many :tweet_tags
+- has_many :tweets, through: :tweet_tags
 
-* Database creation
+## tweet_tags テーブル
+| Column | Type       | Options                        |
+| ------ | ---------- | ------------------------------ |
+| tweet  | references | null: false, foreign_key: true |
+| tag    | references | null: false, foreign_key: true |
 
-* Database initialization
+### Association
+- belongs_to :tweet
+- belongs_to :tag
 
-* How to run the test suite
+## users テーブル
+| Column   | Type   | Options     |
+| -------- | ------ | ----------- |
+| nickname | string | null: false |
+| email    | string | null: false |
+| password | string | null: false |
 
-* Services (job queues, cache servers, search engines, etc.)
+### Association
+- has_many :tweets
+- has_many :comments
 
-* Deployment instructions
+## comments テーブル
+| Column | Type       | Options                        |
+| ------ | ---------- | ------------------------------ |
+| text   | string     | null: false                    |
+| tweet  | references | null: false, foreign_key: true |
+| user   | references | null: false, foreign_key: true |
 
-* ...
+### Association
+- belongs_to :tweet
+- belongs_to :user
